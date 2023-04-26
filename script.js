@@ -49,6 +49,51 @@ btnScrollTo.addEventListener('click', function(e) {
 		top: s1coords.top + window.pageYOffset,
 		behavior: 'smooth'
 	});*/
-// Modern solution for scrolling
-  section1.scrollIntoView({behavior: 'smooth'});
+	// Modern solution for scrolling
+	section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+// Page navigation
+// document.querySelectorAll('.nav__link').forEach(function(el) {
+// 	el.addEventListener('click', function(e) {
+// 		e.preventDefault();
+// 		const id = this.getAttribute('href');
+// 		document.querySelector(id).scrollIntoView({
+// 			behavior: 'smooth'
+// 		});
+// 	});
+// });
+
+// 1. Add event listener to common parent element
+// 2. Determine what element originated the event
+document.querySelector('.nav__links').addEventListener('click', function(e) {
+	e.preventDefault();
+
+	// Matching strategy
+	if (e.target.classList.contains('nav__link')) {
+		const id = e.target.getAttribute('href');
+		document.querySelector(id).scrollIntoView({
+			behavior: 'smooth'
+		});
+	}
+});
+
+// Tabbed component
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+// Use event delegation to attach event listeners to buttons
+tabsContainer.addEventListener('click', function(e) {
+	const clicked = e.target.closest('.operations__tab');
+	console.log(clicked);
+
+	// Guard close
+	if (!clicked) return;
+
+	// Active tab
+	tabs.forEach((tabs) => tabs.classList.remove('operations__tab--active'));
+	clicked.classList.add('operations__tab--active');
+
+	
 });
