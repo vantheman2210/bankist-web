@@ -258,3 +258,5 @@ document.addEventListener('keydown', function(e) {
 	if (e.key === 'ArrowLeft') prevSlide();
 	e.key === 'ArrowRight' && nextSlide();
 });
+
+// Dots for slider
