@@ -195,25 +195,66 @@ allSections.forEach(function(section) {
 // Lazy loading images
 const imgTargets = document.querySelectorAll('img[data-src]');
 
-const loadImg = function(entries, observer) { 
-	const [entry] = entries;
+const loadImg = function(entries, observer) {
+	const [ entry ] = entries;
 
 	if (!entry.isIntersecting) return;
 
 	// Replace src attribute with data-src
-	entry.target.src = entry.target.dataset.src
-	
-	entry.target.addEventListener('load', function() { 
+	entry.target.src = entry.target.dataset.src;
+
+	entry.target.addEventListener('load', function() {
 		entry.target.classList.remove('lazy-img');
 	});
 
 	observer.unobserve(entry.target);
-}
+};
 
-const imgObserver = new IntersectionObserver(loadImg, { 
+const imgObserver = new IntersectionObserver(loadImg, {
 	root: null,
 	threshold: 0,
 	rootMargin: '200px'
 });
 
-imgTargets.forEach(img => imgObserver.observe(img))
+imgTargets.forEach((img) => imgObserver.observe(img));
+
+// Slider component
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+
+let CurSlide = 0;
+const maxSlide = slides.length - 1;
+
+slides.forEach((slide, i) => (slide.style.transform = `translateX(${100 * i}%)`));
+
+const goToSlide = function(side) {
+	slides.forEach((slide, i) => (slide.style.transform = `translateX(${100 * (i - CurSlide)}%)`));
+};
+goToSlide(0);
+
+// Next slide
+const nextSlide = () => {
+	if (CurSlide === maxSlide) {
+		CurSlide = 0;
+	} else {
+		CurSlide += 1;
+	}
+	goToSlide(CurSlide);
+};
+
+const prevSlide = () => {
+	if (CurSlide === 0) {
+		CurSlide = maxSlide;
+	} else {
+		CurSlide -= 1;
+	}
+	goToSlide(CurSlide);
+};
+
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide);
+document.addEventListener('keydown', function(e) {
+	if (e.key === 'ArrowLeft') prevSlide();
+	e.key === 'ArrowRight' && nextSlide();
+});
